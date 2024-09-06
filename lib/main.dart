@@ -47,6 +47,10 @@ class _MyBagScreenState extends State<MyBagScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Get screen dimensions for responsiveness
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -61,85 +65,110 @@ class _MyBagScreenState extends State<MyBagScreen> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(screenWidth * 0.04), // Responsive padding
         child: Column(
           children: [
             // Pullover item
-            buildCartItem('Pullover', 'Black', 'L', pulloverPrice, pulloverQty,
-                pulloverImage, (newQty) {
-                  setState(() {
-                    pulloverQty = newQty;
-                  });
-                }),
-            const SizedBox(height: 10),
+            buildCartItem(
+              'Pullover',
+              'Black',
+              'L',
+              pulloverPrice,
+              pulloverQty,
+              pulloverImage,
+                  (newQty) {
+                setState(() {
+                  pulloverQty = newQty;
+                });
+              },
+              screenWidth,
+            ),
+            SizedBox(height: screenHeight * 0.01), // Responsive spacing
             // T-Shirt item
-            buildCartItem('T-Shirt', 'Gray', 'L', tShirtPrice, tShirtQty,
-                tShirtImage, (newQty) {
-                  setState(() {
-                    tShirtQty = newQty;
-                  });
-                }),
-            const SizedBox(height: 10),
+            buildCartItem(
+              'T-Shirt',
+              'Gray',
+              'L',
+              tShirtPrice,
+              tShirtQty,
+              tShirtImage,
+                  (newQty) {
+                setState(() {
+                  tShirtQty = newQty;
+                });
+              },
+              screenWidth,
+            ),
+            SizedBox(height: screenHeight * 0.01), // Responsive spacing
             // Sport Dress item
-            buildCartItem('Sport Dress', 'Black', 'M', sportDressPrice,
-                sportDressQty, sportDressImage, (newQty) {
-                  setState(() {
-                    sportDressQty = newQty;
-                  });
-                }),
+            buildCartItem(
+              'Sport Dress',
+              'Black',
+              'M',
+              sportDressPrice,
+              sportDressQty,
+              sportDressImage,
+                  (newQty) {
+                setState(() {
+                  sportDressQty = newQty;
+                });
+              },
+              screenWidth,
+            ),
             const Spacer(),
             // Total amount and Checkout button
-            // Total amount and Checkout button
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20),
+              padding: EdgeInsets.symmetric(vertical: screenHeight * 0.02), // Responsive padding
               child: Column(
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
+                      Text(
                         'Total amount:',
-                        style: TextStyle(fontSize: 18),
+                        style: TextStyle(fontSize: screenWidth * 0.045), // Responsive font size
                       ),
                       Text(
-                        '\$${totalAmount}',
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        '\$$totalAmount',
+                        style: TextStyle(
+                          fontSize: screenWidth * 0.05, // Responsive font size
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 20),
-                  // Updated Checkout button
+                  SizedBox(height: screenHeight * 0.02), // Responsive spacing
+                  // Responsive Checkout button
                   SizedBox(
-                    width: double.infinity,  // Make button full width
-                    height: 50,              // Fixed height for the button
+                    width: double.infinity, // Full width
+                    height: screenHeight * 0.07, // Responsive height
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,  // Button color
+                        backgroundColor: Colors.red, // Button color
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25),  // Rounded edges
+                          borderRadius: BorderRadius.circular(25), // Rounded edges
                         ),
                       ),
                       onPressed: () {
-                        // Show snackbar on pressing Checkout
+                        // Show snack bar on pressing Checkout
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text('Congratulations on your purchase!'),
                           ),
                         );
                       },
-                      child: const Text(
+                      child: Text(
                         'CHECK OUT',
                         style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.white,  // Text color
+                          fontSize: screenWidth * 0.045, // Responsive font size
+                          color: Colors.white, // Text color
                         ),
                       ),
                     ),
                   ),
                 ],
               ),
-            ),
-
+            )
           ],
         ),
       ),
@@ -148,12 +177,12 @@ class _MyBagScreenState extends State<MyBagScreen> {
 
   // Function to build each cart item with card layout
   Widget buildCartItem(String name, String color, String size, int price,
-      int quantity, String imageUrl, Function(int) onQuantityChanged) {
+      int quantity, String imageUrl, Function(int) onQuantityChanged, double screenWidth) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       elevation: 2,
       child: Padding(
-        padding: const EdgeInsets.all(12),
+        padding: EdgeInsets.all(screenWidth * 0.03), // Responsive padding
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -161,11 +190,11 @@ class _MyBagScreenState extends State<MyBagScreen> {
             // Image for the item
             Image.asset(
               imageUrl,
-              width: 80,
-              height: 80,
+              width: screenWidth * 0.2, // Responsive image size
+              height: screenWidth * 0.2,
               fit: BoxFit.cover,
             ),
-            const SizedBox(width: 10),
+            SizedBox(width: screenWidth * 0.04), // Responsive spacing
             // Item details
             Expanded(
               child: Column(
@@ -176,29 +205,31 @@ class _MyBagScreenState extends State<MyBagScreen> {
                     children: [
                       Text(
                         name,
-                        style: const TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                          fontSize: screenWidth * 0.045, // Responsive font size
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       // Three-dot icon without any action
                       const Icon(Icons.more_vert),
                     ],
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: screenWidth * 0.01), // Responsive spacing
                   // Color and Size in a row
                   Row(
                     children: [
                       Text(
                         'Color: $color',
-                        style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+                        style: TextStyle(fontSize: screenWidth * 0.035, color: Colors.grey[700]),
                       ),
-                      const SizedBox(width: 10),
+                      SizedBox(width: screenWidth * 0.02), // Responsive spacing
                       Text(
                         'Size: $size',
-                        style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+                        style: TextStyle(fontSize: screenWidth * 0.035, color: Colors.grey[700]),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: screenWidth * 0.03), // Responsive spacing
                   // Quantity, price in a row
                   Row(
                     children: [
@@ -208,10 +239,10 @@ class _MyBagScreenState extends State<MyBagScreen> {
                         }
                       }),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.02), // Responsive spacing
                         child: Text(
                           '$quantity',
-                          style: const TextStyle(fontSize: 18),
+                          style: TextStyle(fontSize: screenWidth * 0.045), // Responsive font size
                         ),
                       ),
                       buildQuantityButton(Icons.add, () {
@@ -220,8 +251,10 @@ class _MyBagScreenState extends State<MyBagScreen> {
                       const Spacer(),
                       Text(
                         '\$${price * quantity}',
-                        style: const TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                          fontSize: screenWidth * 0.045, // Responsive font size
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ],
                   ),
